@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semla</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function showPreferences(event) {
+            event.preventDefault();  // Prevent the form from submitting and refreshing the page.
+            let preferences = [];
+            let message = "Enjoy your custom Semla!"; // Default message
+            
+            // Collect checked preferences for each question
+            let breadPreference = document.querySelectorAll('input[name="preference[]"]:checked');
+            let bananaPreference = document.querySelectorAll('input[name="banana"]:checked');
+            let peanutButterPreference = document.querySelectorAll('input[name="peanut_butter"]:checked');
+
+            // Push the answers along with the question text into preferences array
+            if (breadPreference.length > 0) {
+                preferences.push(`Bread preference: ${Array.from(breadPreference).map(input => input.value).join(" and ")}`);
+            } else {
+                preferences.push(`Bread preference: No selection`);
+            }
+
+            if (bananaPreference.length > 0) {
+                preferences.push(`Banana in: ${Array.from(bananaPreference).map(input => input.value).join(" and ")}`);
+            } else {
+                preferences.push(`Banana in: No selection`);
+            }
+
+            if (peanutButterPreference.length > 0) {
+                preferences.push(`Peanut Butter: ${Array.from(peanutButterPreference).map(input => input.value).join(" and ")}`);
+            } else {
+                preferences.push(`Peanut Butter: No selection`);
+            }
+
+            // Add a special message if the user has selected "In" for the bread or added peanut butter
+            if (breadPreference.length > 0 && Array.from(breadPreference).some(input => input.value === "In")) {
+                message = "You like your bread mixed in the drink! That's unique!";
+            }
+
+            if (peanutButterPreference.length > 0 && Array.from(peanutButterPreference).some(input => input.value === "Yes")) {
+                message = "You love peanut butter! Enjoy your extra flavor!";
+            }
+
+            // Final result page with the custom message and answers
+            let resultPage = `
+                <div class='result'>
+                    <h1>Your Preferences</h1>
+                    <p>${message}</p>
+                    <ul>
+                        ${preferences.map(pref => `<li>${pref}</li>`).join("")}
+                    </ul>
+                    <p>Thanks! Take a screenshot and send it on Messenger to me.</p> <!-- Added message -->
+                    <button onclick="goBack()">Back</button>
+                </div>
+            `;
+            document.body.innerHTML = resultPage;  // Replace the body content with result page
+        }
+
+        // Function to go back to the form
+        function goBack() {
+            window.location.reload();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <img src="https://i.ibb.co/ffWjzfs/indir.jpg" alt="Semla" class="header-img"> <!-- Added image -->
+        <h1>Semla</h1>
+        <div class="questions" id="preferencesSection">
+            <h2>Preferences</h2>
+            <form onsubmit="showPreferences(event)">
+                <p>Do you want your bread mixed in drink or on the side?</p>
+                <label><input type="checkbox" name="preference[]" value="In"> In</label><br>
+                <label><input type="checkbox" name="preference[]" value="Side"> Side</label><br>
+                
+                <p>Do you want banana in?</p>
+                <label><input type="checkbox" name="banana" value="Yes"> Yes</label><br>
+                <label><input type="checkbox" name="banana" value="No"> No</label><br>
+                
+                <p>Do you want to add peanut butter in?</p>
+                <label><input type="checkbox" name="peanut_butter" value="Yes"> Yes</label><br>
+                <label><input type="checkbox" name="peanut_butter" value="No"> No</label><br>
+                
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
